@@ -13,10 +13,10 @@ T.probe_time_norm = zeros(168, 1)
 
 start_time = T.raw_start_time(1) %finding when the stimuli started at first
 
-for k = 1: length(T.raw_start_time) %create the new stim times starting from 0 
-    T.start_time_norm(k) = (T.raw_start_time(k) - start_time) + 0.2
+for k = 1: length(T.raw_start_time)%create the new stim times starting from 0 
+    T.start_time_norm(k) = (T.raw_start_time(k) - start_time) + 0.2 + 10.5*(T.cbRun(k))
     T.delay_start_time(k) = T.start_time_norm(k) + 4.0
-    T.probe_time_norm(k) = T.raw_probe_time(k) - start_time
+    T.probe_time_norm(k) = T.raw_probe_time(k) - start_time + 10.5*(T.cbRun(k))
 end
 
 %making regressors for the 7 different runs in the scanner
@@ -77,7 +77,7 @@ start_time_norm(:,1) = table2array(results_table(1:end, 'start_time_norm'))
 start_time_norm(:,2) = table2array(results_table(1:end, 'cbTrialType'))
 for k = 1: height(results_table) %looping through start times from 0 to give 5 elements in the cellarray SOT correpsonding to the times for each trial type 
 x = start_time_norm(k,2)
-SOT{x}(end+1) = (start_time_norm(k,1))/2.0
+SOT{x}(end+1) = start_time_norm(k,1)
 end
 save(strcat(BehavDir, '/SOT.mat'), 'SOT')
 
@@ -88,7 +88,7 @@ delay_time_norm(:,1) = table2array(results_table(1:end, 'delay_start_time'))
 delay_time_norm(:,2) = table2array(results_table(1:end, 'cbTrialType'))
 for k = 1: height(results_table) % looping delay start times from 0 to give 5 elements in the cellarray DOT correpsonding to the times for each trial type 
 y = delay_time_norm(k,2)
-DOT{y}(end+1) = (delay_time_norm(k,1))/2.0
+DOT{y}(end+1) = delay_time_norm(k,1)
 end
 save(strcat(BehavDir, '/DOT.mat'), 'DOT')
 
@@ -100,7 +100,7 @@ probe_time_norm(:,1) = table2array(results_table(1:end, 'probe_time_norm'))
 probe_time_norm(:,2) = table2array(results_table(1:end, 'cbTrialType'))
 for k = 1: height(results_table) % looping probe start times from 0 to give 5 elements in the cellarray DOT correpsonding to the times for each trial type 
 z = probe_time_norm(k,2)
-POT{z}(end+1) = (probe_time_norm(k,1))/2.0
+POT{z}(end+1) = probe_time_norm(k,1)
 end
 save(strcat(BehavDir, '/POT.mat'), 'POT')
 

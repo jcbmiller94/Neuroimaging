@@ -41,6 +41,7 @@ trial_types = {'1': np.empty((0,3)), '2': np.empty((0,3)), '3': np.empty((0,3)),
 
 df = pd.DataFrame(y2, columns = ['E','D','P','Run','TT'])
 df = df.sort_values(['TT','E']) 
+np.savetxt('Onsets_Concatenated.txt', df)
 
 TT1 = np.array(df.iloc[0:28,0:5])
 TT2 = np.array(df.iloc[28:56,0:5])
@@ -49,7 +50,25 @@ TT4 = np.array(df.iloc[112:140,0:5])
 TT5 = np.array(df.iloc[140:168,0:5])
 
 
-names = ['E1', 'E2', 'E3', 'E4', 'E5', 'D1', 'D2', 'D3', 'D4', 'D5', 'P1', 'P2', 'P3', 'P4', 'P5']
+names = np.empty(15, dtype=object)
+#['E1', 'E2', 'E3', 'E4', 'E5', 'D1', 'D2', 'D3', 'D4', 'D5', 'P1', 'P2', 'P3', 'P4', 'P5']
+names[0] = 'E1'
+names[1] = 'E2'
+names[2] = 'E3'
+names[3] = 'E4'
+names[4] = 'E5'
+names[5] = 'D1'
+names[6] = 'D2'
+names[7] = 'D3'
+names[8] = 'D4'
+names[9] = 'D5'
+names[10] = 'P1'
+names[11] = 'P2'
+names[12] = 'P3'
+names[13] = 'P4'
+names[14] = 'P5'
+
+
 onsets = np.empty(15, dtype=object)
 onsets[0] = TT1[:,0]
 onsets[1] = TT2[:,0]
@@ -69,9 +88,19 @@ onsets[12] = TT3[:,2]
 onsets[13] = TT4[:,2]
 onsets[14] = TT5[:,2]
 
-#print(onsets)
 
-durations = [4, 4, 4, 4, 4, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0]
+durations = np.empty(15, dtype=object)
+#durations = [4, 4, 4, 4, 4, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0]
+for i in range(durations.shape[0]):
+	if i < 5:
+		durations[i] = np.array([float(4)])
+	elif i > 4 and i < 10:
+		durations[i] = np.array([float(9)])
+	elif i > 9:
+		durations[i] = np.array([float(0)])
+print(durations)
+
+"""Getting the onset times for multivariate analysis ==> one onset for each presentation"""
 
 
 #Onset_times_collapsed = {'Encode_all': y2[:,0], 'Delay_all': y2[:,1], 'Probe_all': y2[:,2]}

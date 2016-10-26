@@ -40,7 +40,7 @@ for i in range(len(dictionary)):
 trial_types = {'1': np.empty((0,3)), '2': np.empty((0,3)), '3': np.empty((0,3)),'4': np.empty((0,3)), '5': np.empty((0,3))}
 
 df = pd.DataFrame(y2, columns = ['E','D','P','Run','TT'])
-df = df.sort_values(['TT','E']) 
+df = df.sort_values(['TT','E'])
 np.savetxt('Onsets_Concatenated.txt', df)
 
 TT1 = np.array(df.iloc[0:28,0:5])
@@ -101,10 +101,20 @@ for i in range(durations.shape[0]):
 print(durations)
 
 """Getting the onset times for multivariate analysis ==> one onset for each presentation"""
+#use np.delete to remove the specific value for the onset time
+multi_onset_times = []
+multi_onsets = onsets
+for i in range(multi_onsets.shape[0]):
+    for k in range(multi_onsets[i].shape[0]):
+        a = multi_onsets[i]
+        multi_onset_times.append(a[k])
+        a[k] = None
+        multi_onsets[i] = a
+        """Now do just for the delay onsets!!"""
 
 
 #Onset_times_collapsed = {'Encode_all': y2[:,0], 'Delay_all': y2[:,1], 'Probe_all': y2[:,2]}
 #io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_conds_collapsed/Onset_times.mat', Onset_times_collapsed)
 
-Onsets_TT = {'names': names, 'onsets': onsets, 'durations': durations}
-io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_by_trial_type/Conditions.mat', Onsets_TT)
+#Onsets_TT = {'names': names, 'onsets': onsets, 'durations': durations}
+#io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_by_trial_type/Conditions.mat', Onsets_TT)

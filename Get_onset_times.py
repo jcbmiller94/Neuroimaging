@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import scipy.io as io
+import json
+from copy import deepcopy
 
 # read in text file
 x = np.genfromtxt('JSpilot1_resultsTXT.txt', names = True, dtype = None)
@@ -16,32 +18,35 @@ y[:,4] = x['cbTrialType']
 dictionary = {'1': np.zeros((24,5)), '2': np.zeros((24,5)), '3': np.zeros((24,5)),'4': np.zeros((24,5)), '5': np.zeros((24,5)), '6': np.zeros((24.5)), '7': np.zeros((24.5))}
 
 for i in range(len(dictionary)):
-    dictionary[str(i+1)] = y[(i*24):((i+1)*24)]
-    ##print(dictionary[str(i+1)])
+	dictionary[str(i+1)] = y[(i*24):((i+1)*24)]
+	##print(dictionary[str(i+1)])
 
+#looping through the dictionary (1 entry for each run) to correct for start times of each run
 for i in range(len(dictionary)):
-    arr = dictionary[str(i+1)]
-    a = arr[0,0]
-    b = arr[0,2]
-    for k in range(arr.shape[0]):
-        arr[k,0] -= a
-        arr[k,1] = arr[k,0] + 4.0
-        arr[k,2] -= a
-        arr[k,0:3] += + 442*i + 10.7
-        arr[k,2] -= 0.2
-    #print(arr)
+	arr = dictionary[str(i+1)]
+	a = arr[0,0]
+	b = arr[0,2]
+	for k in range(arr.shape[0]):
+		arr[k,0] -= a #setting first time of each run to zero, all other times in this run relative to this point
+		arr[k,1] = arr[k,0] + 4.0
+		arr[k,2] -= a
+		arr[k,0:3] += + 442*i + 10.7 #adjusting times for the start of each run (221 TRs = 442 s)
+		arr[k,2] -= 0.2
+	#print(arr)
 
 y2 = np.empty((0,5))
 
 for i in range(len(dictionary)):
-    y2 = np.append(y2, dictionary[str(i+1)], axis = 0)
+	y2 = np.append(y2, dictionary[str(i+1)], axis = 0)
 
+np.savetxt('Onsets_Collapsed.txt', y2)
 
 trial_types = {'1': np.empty((0,3)), '2': np.empty((0,3)), '3': np.empty((0,3)),'4': np.empty((0,3)), '5': np.empty((0,3))}
 
 df = pd.DataFrame(y2, columns = ['E','D','P','Run','TT'])
+#Encoding, delay, probe, run number, trial type
 df = df.sort_values(['TT','E'])
-np.savetxt('Onsets_Concatenated.txt', df)
+#np.savetxt('Onsets_Concatenated.txt', df)
 
 TT1 = np.array(df.iloc[0:28,0:5])
 TT2 = np.array(df.iloc[28:56,0:5])
@@ -98,23 +103,51 @@ for i in range(durations.shape[0]):
 		durations[i] = np.array([float(9)])
 	elif i > 9:
 		durations[i] = np.array([float(0)])
-print(durations)
+#print(durations)
 
 """Getting the onset times for multivariate analysis ==> one onset for each presentation"""
 #use np.delete to remove the specific value for the onset time
-multi_onset_times = []
-multi_onsets = onsets
-for i in range(multi_onsets.shape[0]):
-    for k in range(multi_onsets[i].shape[0]):
-        a = multi_onsets[i]
-        multi_onset_times.append(a[k])
-        a[k] = None
-        multi_onsets[i] = a
-        """Now do just for the delay onsets!!"""
+multi_onsets = {}
+delay_onset_times = []
+tracker = 0
+# a = onsets
+for i in range(5,10):
+	for k in range(onsets[i].shape[0]):
+		a = deepcopy(onsets)
+		delay_onset_times.append(a[i][k])
+		a[i][k] = None
+		multi_onsets[tracker] = a
+		# a[i][k] = np.nan_to_num(a[i][k])
+		# a[i][k] = onsets[i][k]
+		tracker += 1
 
-
+#saving matlab files for all conditions collapsed
 #Onset_times_collapsed = {'Encode_all': y2[:,0], 'Delay_all': y2[:,1], 'Probe_all': y2[:,2]}
 #io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_conds_collapsed/Onset_times.mat', Onset_times_collapsed)
 
+#saving matlab files for onsets by trial type
 #Onsets_TT = {'names': names, 'onsets': onsets, 'durations': durations}
 #io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_by_trial_type/Conditions.mat', Onsets_TT)
+
+"""saving matlab files for onsets with multivariate analysis (delay onsets pulled out)"""
+names = np.insert(names, [0], 'Trial', axis = 0)
+#d = np.array([9.0], dtype = float)
+#durations = np.insert(durations, [0], d, axis = 0)
+durations = np.empty(16, dtype=object)
+#durations = [9, 4, 4, 4, 4, 4, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0]
+
+for i in range(durations.shape[0]):
+	if i == 0:
+		durations[i] = np.array([float(9)])
+	elif i < 6:
+		durations[i] = np.array([float(4)])
+	elif i > 5 and i < 11:
+		durations[i] = np.array([float(9)])
+	elif i > 10:
+		durations[i] = np.array([float(0)])
+
+multi_conditions = {}
+for i in range(len(multi_onsets)):
+	multi_onsets[i] = np.insert(multi_onsets[i], [0], delay_onset_times[i], axis=0)
+	multi_conditions[i] = {'onsets': multi_onsets[i], 'names': names, 'durations': durations}
+	io.savemat('Conditions' + str(i) + '.mat', multi_conditions[i])

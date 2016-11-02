@@ -41,6 +41,9 @@ for i in range(len(dictionary)):
 
 np.savetxt('Onsets_Collapsed.txt', y2)
 
+"""splitting up the onset times by trial types - using a pandas data frame to do so. Sorting by 
+trial type and then by E, encoding onset time"""
+
 trial_types = {'1': np.empty((0,3)), '2': np.empty((0,3)), '3': np.empty((0,3)),'4': np.empty((0,3)), '5': np.empty((0,3))}
 
 df = pd.DataFrame(y2, columns = ['E','D','P','Run','TT'])
@@ -54,7 +57,8 @@ TT3 = np.array(df.iloc[56:112,0:5])
 TT4 = np.array(df.iloc[112:140,0:5])
 TT5 = np.array(df.iloc[140:168,0:5])
 
-
+"""Defining 'names', 'onsets', and 'durations' numpy object arrays for use in a dictionary to save as a matlab compatible file. 
+These will serve as the inputs for SPM's model specification using multiple conditions"""
 names = np.empty(15, dtype=object)
 #['E1', 'E2', 'E3', 'E4', 'E5', 'D1', 'D2', 'D3', 'D4', 'D5', 'P1', 'P2', 'P3', 'P4', 'P5']
 names[0] = 'E1'
@@ -105,6 +109,17 @@ for i in range(durations.shape[0]):
 		durations[i] = np.array([float(0)])
 #print(durations)
 
+
+#saving matlab files for all conditions collapsed
+#Onset_times_collapsed = {'Encode_all': y2[:,0], 'Delay_all': y2[:,1], 'Probe_all': y2[:,2]}
+#io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_conds_collapsed/Onset_times.mat', Onset_times_collapsed)
+
+#saving matlab files for onsets by trial type
+#Onsets_TT = {'names': names, 'onsets': onsets, 'durations': durations}
+#io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_by_trial_type/Conditions.mat', Onsets_TT)
+
+
+"""Everything below is for multivariate analyses only - use just if this is the goal"""
 """Getting the onset times for multivariate analysis ==> one onset for each presentation"""
 #use np.delete to remove the specific value for the onset time
 multi_onsets = {}
@@ -115,19 +130,18 @@ for i in range(5,10):
 	for k in range(onsets[i].shape[0]):
 		a = deepcopy(onsets)
 		delay_onset_times.append(a[i][k])
-		a[i][k] = None
+		#a[i][k] = None
+
+		b = a[i] #setting b equal to the specific array in onsets for which a value at index k will be deleted
+		b = np.delete(b, k) #deleting value at index k
+		a[i] = b #setting a[i] equal to b, with the value at index k deleted
+
 		multi_onsets[tracker] = a
 		# a[i][k] = np.nan_to_num(a[i][k])
 		# a[i][k] = onsets[i][k]
 		tracker += 1
 
-#saving matlab files for all conditions collapsed
-#Onset_times_collapsed = {'Encode_all': y2[:,0], 'Delay_all': y2[:,1], 'Probe_all': y2[:,2]}
-#io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_conds_collapsed/Onset_times.mat', Onset_times_collapsed)
 
-#saving matlab files for onsets by trial type
-#Onsets_TT = {'names': names, 'onsets': onsets, 'durations': durations}
-#io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_by_trial_type/Conditions.mat', Onsets_TT)
 
 """saving matlab files for onsets with multivariate analysis (delay onsets pulled out)"""
 names = np.insert(names, [0], 'Trial', axis = 0)
@@ -148,6 +162,7 @@ for i in range(durations.shape[0]):
 
 multi_conditions = {}
 for i in range(len(multi_onsets)):
-	multi_onsets[i] = np.insert(multi_onsets[i], [0], delay_onset_times[i], axis=0)
+	specific_trial = np.array([delay_onset_times[i]])
+	multi_onsets[i] = np.insert(multi_onsets[i], [0], specific_trial, axis=0)
 	multi_conditions[i] = {'onsets': multi_onsets[i], 'names': names, 'durations': durations}
-	io.savemat('Conditions' + str(i) + '.mat', multi_conditions[i])
+	io.savemat('/home/despoB/jam124/BiCoWM/batch_scripts/Conditions/Conditions' + str(i+1) + '.mat', multi_conditions[i])

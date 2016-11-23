@@ -47,9 +47,9 @@ trial type and then by E, encoding onset time"""
 trial_types = {'1': np.empty((0,3)), '2': np.empty((0,3)), '3': np.empty((0,3)),'4': np.empty((0,3)), '5': np.empty((0,3))}
 
 df = pd.DataFrame(y2, columns = ['E','D','P','Run','TT'])
-#Encoding, delay, probe, run number, trial type
+# Encoding, delay, probe, run number, trial type
 df = df.sort_values(['TT','E'])
-#np.savetxt('Onsets_Concatenated.txt', df)
+# np.savetxt('Onsets_Concatenated.txt', df)
 
 TT1 = np.array(df.iloc[0:28,0:5])
 TT2 = np.array(df.iloc[28:56,0:5])
@@ -60,7 +60,7 @@ TT5 = np.array(df.iloc[140:168,0:5])
 """Defining 'names', 'onsets', and 'durations' numpy object arrays for use in a dictionary to save as a matlab compatible file. 
 These will serve as the inputs for SPM's model specification using multiple conditions"""
 names = np.empty(15, dtype=object)
-#['E1', 'E2', 'E3', 'E4', 'E5', 'D1', 'D2', 'D3', 'D4', 'D5', 'P1', 'P2', 'P3', 'P4', 'P5']
+# ['E1', 'E2', 'E3', 'E4', 'E5', 'D1', 'D2', 'D3', 'D4', 'D5', 'P1', 'P2', 'P3', 'P4', 'P5']
 names[0] = 'E1'
 names[1] = 'E2'
 names[2] = 'E3'
@@ -110,18 +110,18 @@ for i in range(durations.shape[0]):
 #print(durations)
 
 
-#saving matlab files for all conditions collapsed
-#Onset_times_collapsed = {'Encode_all': y2[:,0], 'Delay_all': y2[:,1], 'Probe_all': y2[:,2]}
-#io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_conds_collapsed/Onset_times.mat', Onset_times_collapsed)
+"""saving matlab files for all conditions collapsed"""
+# Onset_times_collapsed = {'Encode_all': y2[:,0], 'Delay_all': y2[:,1], 'Probe_all': y2[:,2]}
+# io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_conds_collapsed/Onset_times.mat', Onset_times_collapsed)
 
-#saving matlab files for onsets by trial type
-#Onsets_TT = {'names': names, 'onsets': onsets, 'durations': durations}
-#io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_by_trial_type/Conditions.mat', Onsets_TT)
+"""saving matlab files for onsets by trial type"""
+# Onsets_TT = {'names': names, 'onsets': onsets, 'durations': durations}
+# io.savemat('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_by_trial_type/Conditions.mat', Onsets_TT)
 
 
 """Everything below is for multivariate analyses only - use just if this is the goal"""
 """Getting the onset times for multivariate analysis ==> one onset for each presentation"""
-#use np.delete to remove the specific value for the onset time
+# use np.delete to remove the specific value for the onset time
 multi_onsets = {}
 delay_onset_times = []
 tracker = 0
@@ -144,15 +144,24 @@ for i in range(5,10):
 
 
 """saving matlab files for onsets with multivariate analysis (delay onsets pulled out)"""
+
+# getting the list of trial type order for the subsequent multvariate analyses (for delay trials) 
+TT_vector = np.ones((3, 168))
+for i in range(TT_vector.shape[-1]):
+	TT_vector[0, i] = i + 1 
+	TT_vector[1, i] = int(df.iloc[i, 4])
+	TT_vector[2, i] = df.iloc[i, 1]
+np.savetxt('/home/despoB/jam124/BiCoWM/derivatives_test/s01/GLM_multivariate/Multivariate_TrialType_Order.txt', TT_vector) 
+
 names = np.insert(names, [0], 'Trial', axis = 0)
-#d = np.array([9.0], dtype = float)
-#durations = np.insert(durations, [0], d, axis = 0)
+# d = np.array([9.0], dtype = float)
+# durations = np.insert(durations, [0], d, axis = 0)
 durations = np.empty(16, dtype=object)
-#durations = [9, 4, 4, 4, 4, 4, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0]
+# durations = [9, 4, 4, 4, 4, 4, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0]
 
 for i in range(durations.shape[0]):
 	if i == 0:
-		durations[i] = np.array([float(9)])
+		durations[i] = np.array([float(9)]) # because first columns is the delay event, with a duration of 9 seconds
 	elif i < 6:
 		durations[i] = np.array([float(4)])
 	elif i > 5 and i < 11:
@@ -165,4 +174,4 @@ for i in range(len(multi_onsets)):
 	specific_trial = np.array([delay_onset_times[i]])
 	multi_onsets[i] = np.insert(multi_onsets[i], [0], specific_trial, axis=0)
 	multi_conditions[i] = {'onsets': multi_onsets[i], 'names': names, 'durations': durations}
-	io.savemat('/home/despoB/jam124/BiCoWM/batch_scripts/Conditions/Conditions' + str(i+1) + '.mat', multi_conditions[i])
+	#io.savemat('/home/despoB/jam124/BiCoWM/batch_scripts/Conditions/Conditions' + str(i+1) + '.mat', multi_conditions[i])

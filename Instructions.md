@@ -27,13 +27,8 @@ Data and derivatives layout:
   * derivatives_test 
     * s01 (subject #s) 
       * RawEPI 
-        sub-01_task-BiCoWM_bold_s006a001_001.nii 
-        rsub-01_task-BiCoWM_bold_s006a001_001.nii *realigned and resliced*
-        arsub-01_task-BiCoWM_bold_s006a001_001.nii *slice-time corrected*
-        sarsub-01_task-BiCoWM_bold_s006a001_001.nii *smoothed* 
+        sub-01_task-BiCoWM_bold_s006a001_001.nii ... 
       * Raw_EPI_Session2
-        sub-01C_task-BiCoWM_bold_s006a001_001.nii 
-        asub-01C_task-BiCoWM_bold_s006a001_001.nii *slice-time corrected*
-        rasub-01C_task-BiCoWM_bold_s006a001_001.nii *coregistered and rescliced to sess 1 functional*
-        srasub-01C_task-BiCoWM_bold_s006a001_001.nii *smoothed*
+        sub-01C_task-BiCoWM_bold_s006a001_001.nii ... 
   * raw 
+   * Raw DICOM data from scanner 

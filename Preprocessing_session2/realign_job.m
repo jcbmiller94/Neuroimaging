@@ -1,14 +1,6 @@
 %-----------------------------------------------------------------------
-% PREPROCESSING REALIGNMENT (ESTIMATE AND RESLICE)
-%   Jacob Miller, 12/20/16 (https://github.com/jcbmiller94/Neuroimaging)
-%
-% Use SPM's realignment and reslice functions on data from the  
-%  the BiCoWM task 
-%
-% TO CHECK FOR EACH USE: 
-%  - Filter for selected files (e.g., '^s')  
-%  - Reslice settings (e.g., all iamges + mean image [2 1])  
-%
+% Job saved on 14-Sep-2016 15:24:57 by cfg_util (rev $Rev: 6134 $)
+% spm SPM - SPM12 (6225)
 %-----------------------------------------------------------------------
 function [matlabbatch] = job_realign(b) %Realign: Estimate & Reslice 
 
@@ -25,14 +17,11 @@ matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.interp = 2; % Degree of int
 matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.wrap = [0 0 0]; % Wrapping, Default = [0 0 0]
 matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.weight = ''; % Weighting
 
-matlabbatch{2}.spm.spatial.realign.estwrite.roptions.which = [2 1]; % Rescliced images, default = [2 1] (All images + mean image)
+matlabbatch{2}.spm.spatial.realign.estwrite.roptions.which = [2 1]; % Rescliced images, default = [2 1] (Allimages + mean image
 matlabbatch{2}.spm.spatial.realign.estwrite.roptions.interp = 4;
 matlabbatch{2}.spm.spatial.realign.estwrite.roptions.wrap = [0 0 0];
 matlabbatch{2}.spm.spatial.realign.estwrite.roptions.mask = 1;
 matlabbatch{2}.spm.spatial.realign.estwrite.roptions.prefix = 'r'; % Filename prefix
-
-name = strcat(b.sess, '_realign_batch.mat'); 
-save(name, 'matlabbatch');
 
 spm('defaults','fmri');
 spm_jobman('initcfg');

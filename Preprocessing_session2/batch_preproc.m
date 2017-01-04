@@ -1,5 +1,5 @@
 %-----------------------------------------------------------------------
-% PREPROCESSING SPM PIPELINE
+% PREPROCESSING SPM PIPELINE - SESSION #2 
 %   Jacob Miller, 12/20/16 (https://github.com/jcbmiller94/Neuroimaging) 
 %
 % Run this script to conduct specfied preprocessing steps on data from the 
@@ -15,34 +15,31 @@
 %   directory for each individual preprocessing step 
 %-----------------------------------------------------------------------
 
-
 clear all;
 
 % get and set paths
 scriptdir = pwd;
 
 % Path to the directory containing the Preprocessing scripts and the
-%  initialize_vars file, whihc contains the names of the folders for the
+%  initilize_vars file, whihc contains the names of the folders for the
 %  EPI and structural data, etc 
-addpath('/home/despoB/jam124/BiCoWM/batch_scripts/Preprocessing'); 
+addpath('/home/despoB/jam124/BiCoWM/batch_scripts/Preprocessing_session2/'); 
 
 % Specify variables
 
 % Output label for the .mat file saving the input parameters for each
 %  preprocessing step - these are set to save in the same directory as the
 %  EPI and structural folders
-outLabel = 'Basic_pp_Session1'; 
+outLabel = 'Basic_pp_Session2'; 
 
 % List of subject labels, will be used for savng files and accessing paths 
 %  important: this much match the label of the folder containing the EPI
 %  and structural data for the subject, unless specific elsewhere 
 subjects = {'s01'};
 
-% List of the functions (scripts) that will be called on in the loop below
+% List of the functins (scripts) that will be called on in the loop below
 %  must match the filenames correctly 
-
-batch_functions = {'realign_job' 'slice_timing_job' 'coreg_job_alt' 'smooth_job'};
-%batch_functions = {'smooth_job_test'};
+batch_functions = {'realign_estimate_only_job' 'slice_timing_job' 'coreg_estimate_reslice_job' 'smooth_job'};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

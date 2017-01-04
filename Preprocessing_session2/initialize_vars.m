@@ -8,11 +8,10 @@
 % TO CHANGE FOR EACH USE: 
 %  Data location: 
 %  - b.dataDir
-%  - b.funcRuns:'RawEPI' (or 'RawEPI_Session2')
-%  - b.sess: 'Session1' , etc. 
+%  - b.funcRuns:'RawEPI_Session2' 
+%  - b.sess: 'Session2' , etc. 
 % 
 %-----------------------------------------------------------------------
-
 
 function [b] = initialize_vars(subjects,i)
 
@@ -28,13 +27,14 @@ b.curSubj = subjects{i};
 % building the name of the dat directory where the data for each subject is
 b.dataDir = strcat(dataDir,b.curSubj,'/'); 
 % folder(s) containing functional images
-b.funcRuns = {'RawEPI'};  
+b.funcRuns = {'RawEPI_Session2'}; 
+b.funcSess1 = 'RawEPI'; 
 % folder containing T1 structural
 b.anatT1 = 'Structural';  
 b.behavDir = '/home/despoB/jam124/BiCoWM/behav/Pilot1_JS/'
 % Call sub-function to run exceptions
 %b = run_exceptions(b);
-b.sess = 'Session1' 
+b.sess = 'Session2'
 
 end
 

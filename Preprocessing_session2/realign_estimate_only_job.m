@@ -1,16 +1,16 @@
 %-----------------------------------------------------------------------
-% PREPROCESSING REALIGNMENT (ESTIMATE AND RESLICE)
+% PREPROCESSING REALIGNMENT (ESTIMATE ONLY)
 %   Jacob Miller, 12/20/16 (https://github.com/jcbmiller94/Neuroimaging)
 %
-% Use SPM's realignment and reslice functions on data from the  
-%  the BiCoWM task 
+% Use SPM's realignment unctions on data from the the BiCoWM task (but no 
+%   reslicing until the registration step 
 %
 % TO CHECK FOR EACH USE: 
 %  - Filter for selected files (e.g., '^s')  
-%  - Reslice settings (e.g., all iamges + mean image [2 1])  
 %
 %-----------------------------------------------------------------------
-function [matlabbatch] = job_realign(b) %Realign: Estimate & Reslice 
+
+function [matlabbatch] = job_realign_estimate(b) %Realign: Estimate & Reslice 
 
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.dir = {[b.dataDir b.funcRuns{1}]}; % File Selector (Batch Mode): Directory - cfg_files
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.filter = '^s'; % File Selector (Batch Mode): Filter - cfg_entry, start of filenames (i.e. '^s') 
@@ -23,9 +23,8 @@ matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.fwhm = 5; % Gaussian smooth
 matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.rtm = 1; % Realign to mean (1) or first (0) image 
 matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.interp = 2; % Degree of interpolation, default = 2
 matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.wrap = [0 0 0]; % Wrapping, Default = [0 0 0]
-matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.weight = ''; % Weighting
-
-matlabbatch{2}.spm.spatial.realign.estwrite.roptions.which = [2 1]; % Rescliced images, default = [2 1] (All images + mean image)
+matlabbatch{2}.spm.spatial.realign.estwrite.eoptions.weight = '';
+matlabbatch{2}.spm.spatial.realign.estwrite.roptions.which = [0 1]; % reslice the MEAN image only, not all images
 matlabbatch{2}.spm.spatial.realign.estwrite.roptions.interp = 4;
 matlabbatch{2}.spm.spatial.realign.estwrite.roptions.wrap = [0 0 0];
 matlabbatch{2}.spm.spatial.realign.estwrite.roptions.mask = 1;

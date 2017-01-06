@@ -5,14 +5,14 @@
 % Use SPM's smoothing function on image data from the the BiCoWM task 
 %
 % TO CHECK FOR EACH USE: 
-%  - Filter for selected files (e.g., '^ar')  
+%  - Filter for selected files (e.g., '^ra')  
 %  - Smoothing kernel size (e.g., [8 8 8]) FWHM in mm 
 %
 %-----------------------------------------------------------------------
 function [matlabbatch] = job_smooth(b)
 
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.dir = {[b.dataDir b.funcRuns{1}]};
-matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.filter = '^ar';
+matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.filter = '^ra';
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.rec = 'FPList';
 matlabbatch{2}.spm.spatial.smooth.data(1) = cfg_dep('File Selector (Batch Mode): Selected Files', substruct('.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}, '.','val', '{}',{1}), substruct('.','files'));
 matlabbatch{2}.spm.spatial.smooth.fwhm = [8 8 8]; %Size of Gaussian smoothing kernel 

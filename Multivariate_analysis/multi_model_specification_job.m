@@ -1,12 +1,25 @@
 %-----------------------------------------------------------------------
-% Job saved on 19-Oct-2016 20:56:12 by cfg_util (rev $Rev: 6460 $)
-% spm SPM - SPM12 (6685)
+% MULTIVARIATE MODEL SPECIFICATION
+%   Jacob Miller, 12/20/16 (https://github.com/jcbmiller94/Neuroimaging) 
+%
+% Using matlabbatch and spm_jobman
+%
+% Notes:
+% - uses preprocessed, but unsmoothed .nii files 
+% - assumed relaignment parameters starting with 'rp' and ending in '.txt'
+% are save in same location as the EPI files 
+
+% TO CHANGE FOR EACH USE:
+% - filter (e.g. '^ra') - change depending on prefixes of your unsmoothed
+%  files, and order of preprocessing 
+% - slice timing info: TR, # of slices / TR, reference slice # (see below) 
+% - time/disperision derivatives, masking threshold (see below) 
 %-----------------------------------------------------------------------
 function [matlabbatch] = job_model_specification(b)
 
 
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.dir = {[b.dataDir b.funcRuns{1}]};
-matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.filter = '^ar';
+matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.filter = '^ra'; 
 matlabbatch{1}.cfg_basicio.file_dir.file_ops.file_fplist.rec = 'FPList';
 
 motion = dir(fullfile(b.dataDir, b.funcRuns{1}, '*rp*.txt'))
@@ -24,10 +37,10 @@ matlabbatch{2}.spm.stats.fmri_spec.sess.regress = struct('name', {}, 'val', {});
 matlabbatch{2}.spm.stats.fmri_spec.sess.multi_reg = {motionpath}; %i.e., '/home/despoB/jam124/BiCoWM/derivatives_test/s01/RawEPI/rp_sub-01_task-BiCoWM_bold_s006a001_001.txt'
 matlabbatch{2}.spm.stats.fmri_spec.sess.hpf = 128;
 matlabbatch{2}.spm.stats.fmri_spec.fact = struct('name', {}, 'levels', {});
-matlabbatch{2}.spm.stats.fmri_spec.bases.hrf.derivs = [0 0]; %time or dispersion derivatives?
+matlabbatch{2}.spm.stats.fmri_spec.bases.hrf.derivs = [0 0]; %time or dispersion derivatives? ([0 0] for none)
 matlabbatch{2}.spm.stats.fmri_spec.volt = 1;
 matlabbatch{2}.spm.stats.fmri_spec.global = 'None';
-matlabbatch{2}.spm.stats.fmri_spec.mthresh = 0.8;
+matlabbatch{2}.spm.stats.fmri_spec.mthresh = 0.8; % masking threshold for voxel intensity (default = 0.8)
 matlabbatch{2}.spm.stats.fmri_spec.mask = {''};
 matlabbatch{2}.spm.stats.fmri_spec.cvi = 'AR(1)';
 

@@ -1,6 +1,16 @@
 %-----------------------------------------------------------------------
-% Job saved on 19-Oct-2016 21:32:54 by cfg_util (rev $Rev: 6460 $)
-% spm SPM - SPM12 (6685)
+% MULTIVARIATE MODEL ESTIMATION
+%   Jacob Miller, 12/20/16 (https://github.com/jcbmiller94/Neuroimaging) 
+%
+% Using matlabbatch and spm_jobman
+%
+% Notes:
+% - uses preprocessed, but unsmoothed .nii files 
+% -  
+
+% TO CHANGE FOR EACH USE:
+% - filter (e.g. '^ra') - change depending on prefixes of your unsmoothed
+%  files, and order of preprocessing 
 %-----------------------------------------------------------------------
 function [matlabbatch] = job_model_estimation(b)
 

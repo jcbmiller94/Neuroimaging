@@ -1,13 +1,6 @@
 %-----------------------------------------------------------------------
-% PREPROCESSING COREGISTRATION (ESTIMATION ONLY)
-%   Jacob Miller, 12/20/16 (https://github.com/jcbmiller94/Neuroimaging)
-%
-% Use SPM's coregistration function to estimate parameters for registration 
-%
-% TO CHECK FOR EACH USE: 
-%  - func: location and filter for mean functional image 
-%  - anat: location and filter for subject anatomical 
-%
+% Job saved on 15-Sep-2016 18:24:35 by cfg_util (rev $Rev: 6134 $)
+% spm SPM - SPM12 (6225)
 %-----------------------------------------------------------------------
 function [matlabbatch] = job_coreg_alt(b)
 
@@ -26,9 +19,6 @@ matlabbatch{1}.spm.spatial.coreg.estimate.eoptions.cost_fun = 'nmi';
 matlabbatch{1}.spm.spatial.coreg.estimate.eoptions.sep = [4 2];
 matlabbatch{1}.spm.spatial.coreg.estimate.eoptions.tol = [0.02 0.02 0.02 0.001 0.001 0.001 0.01 0.01 0.01 0.001 0.001 0.001];
 matlabbatch{1}.spm.spatial.coreg.estimate.eoptions.fwhm = [7 7];
-
-name = strcat(b.sess, '_coreg_est_batch.mat'); 
-save(name, 'matlabbatch');
 
 spm('defaults','fmri');
 spm_jobman('initcfg');

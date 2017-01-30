@@ -8,15 +8,19 @@ Assumptions:
 - ('raw_start_time', 'raw_probe_time', 'cbRun', 'cbTrialType') are the column names,
     otherwise this should be specified
 
+Example of how to run form command line:
+
+python Get_onset_times_bcwm.py -f '/home/despoB/jam124/BiCoWM/behav/Pilot1_JS/JSpilot1_resultsTXT.txt' -f2 '/home/despoB/jam124/BiCoWM/behav/Pilot1_JS_Session2/BCWM_pilot1C_resultsTXT.txt' 
+
 """
 
 # importing all the good stuff
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import pandas as pd
 import scipy.io as io
 import scipy.stats as stats
-import seaborn as sns
+#import seaborn as sns
 
 import json
 from copy import deepcopy
@@ -156,11 +160,11 @@ def collapsed_conds_files(onsets_by_run, fname, combined = False):
         suffix = '_sess_1'
 
     # save text file of onset times sorted in order of run
-    np.savetxt('Onsets_Collapsed_' + fname.split('.')[0] + '.txt', onsets_by_run)
+    np.savetxt('Onsets_Collapsed_' + fname.split('/')[-2] + suffix + '.txt', onsets_by_run, fmt='%1.3f')
 
     # save matlab files for all conditions collapsed
     Onset_times_collapsed = {'Encode_all': onsets_by_run[:,0], 'Delay_all': onsets_by_run[:,1], 'Probe_all': onsets_by_run[:,2]}
-    io.savemat('Onsets_Collapsed_' + fname.split('.')[0] + suffix + '.mat', Onset_times_collapsed)
+    io.savemat('Onsets_Collapsed_' + fname.split('/')[-2] + suffix + '.mat', Onset_times_collapsed)
 
     return
 
@@ -203,7 +207,7 @@ def split_conds_files(onsets_by_run, fname, combined = False):
     TT5 = np.array(grouped_TT.get_group(5), dtype = np.float64)
 
     # save text file of onset times sorted by trial type
-    np.savetxt('Onsets_Split_' + fname.split('.')[0] + suffix + '.txt', df)
+    np.savetxt('Onsets_Split_' + fname.split('/')[-2] + suffix + '.txt', df, fmt='%1.3f')
 
     # making names, onsets, and durations np object arrays to a dictionary to save as a .mat file
     #  these will serve as the inputs for SPM's model specification using multiple conditions
@@ -233,7 +237,7 @@ def split_conds_files(onsets_by_run, fname, combined = False):
 
     # save matlab file for multiple conditions for use in GLM
     Onsets_TT = {'names': names, 'onsets': onsets, 'durations': durations}
-    io.savemat('Conditions_' + fname.split('.')[0] + suffix + '.mat', Onsets_TT)
+    io.savemat('Conditions_' + fname.split('/')[-2] + suffix + '.mat', Onsets_TT)
 
     return df, onsets, names, durations
 
@@ -321,16 +325,16 @@ def multi_onset_files(df, onsets, names, durations):
     	TT_vector[0, i] = i + 1
     	TT_vector[1, i] = int(df.iloc[i, 4])
     	TT_vector[2, i] = df.iloc[i, 1]
-    np.savetxt('TrialType_order_multivariate.txt', TT_vector)
+    np.savetxt('TrialType_order_multivariate.txt', TT_vector, fmt='%1.3f')
 
     return
 
 
-fname = 'JSpilot1_resultsTXT.txt'
-d = read_txt_file(fname)
-onsets_by_run = norm_onset_times(d, 221, 2)
-df, onsets, names, durations = split_conds_files(onsets_by_run, fname)
-multi_onset_files(df, onsets, names, durations)
+#fname = 'JSpilot1_resultsTXT.txt'
+#d = read_txt_file(fname)
+#onsets_by_run = norm_onset_times(d, 221, 2)
+#df, onsets, names, durations = split_conds_files(onsets_by_run, fname)
+#multi_onset_files(df, onsets, names, durations)
 
 
 def main():

@@ -1,8 +1,28 @@
+%-----------------------------------------------------------------------
+% COMBINED UNIVARIATE ANALYSIS FOR ESTIMATION OF BETA MAPS
+%   Jacob Miller, 12/20/16 (https://github.com/jcbmiller94/Neuroimaging) 
+%
+
+% Run this script to conduct a combined univariatee analysis on multiple 
+% sessions of data from the BiCoWM task. See the initialize_vars 
+% file for information of changing the files and paths for sesisons 
+
+% Notes:
+% - runtime _ hrs
+% - this framework uses preprocessed .nii files 
+% - the spm_fmri_concatenate function must be in the same directory as the
+%    analysis scripts (this same one), to be changed later 
+% - a directory for the results output (as specified in
+%   initialize_vars_analysis) must already exist 
+%
+% TO CHANGE FOR EACH USE:
+%  - subjects = {} enter a string for the subject label being run (e.g.'s01') 
+%-----------------------------------------------------------------------
 clear all;
 
 % get and set paths
 scriptdir = pwd;
-addpath('/home/despoB/jam124/BiCoWM/batch_scripts'); % add any necessary paths (e.g., to initialize_vars)
+addpath('/home/despoB/jam124/BiCoWM/batch_scripts/First_level_analysis/'); % add any necessary paths (e.g., to initialize_vars)
 
 % Specify variables
 outLabel = 'basic_analyze'; %output label

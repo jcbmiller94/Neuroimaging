@@ -1,6 +1,12 @@
 %-----------------------------------------------------------------------
-% Job saved on 19-Oct-2016 21:32:54 by cfg_util (rev $Rev: 6460 $)
-% spm SPM - SPM12 (6685)
+% UNIVARIATE MODEL ESTIMATION
+%   Jacob Miller, 12/20/16 (https://github.com/jcbmiller94/Neuroimaging)
+%
+% Use SPM's model estimation function to calculate regressor weights (B) from the GLM 
+%
+% TO CHECK FOR EACH USE: 
+%  -  
+%
 %-----------------------------------------------------------------------
 function [matlabbatch] = job_model_estimation(b)
 

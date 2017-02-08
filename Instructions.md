@@ -47,3 +47,5 @@ slice_times = hdr{1}.Private_0019_1029
 (4) Look through the header of each script specified above in the preprocessing folder for the given session. Ensure the filters, relative filepaths, and settings are specified correctly. 
 
 (5) Finally, from the Matlab command window: `run batch_preproc.m`. Matlabbatch files for each preprocessing step will be saved under the subject ID in the derivatives_test folder 
+
+### III. Instructions for running univariate analysis across sessions (within-subject)

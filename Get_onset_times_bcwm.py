@@ -30,6 +30,7 @@ import sys
 import argparse
 
 np.set_printoptions(precision=2)  # print arrays to 2 DP
+print('test')
 
 # getting the relative path info from the script
 script_dir = dirname(os.path.abspath(__file__)) # directory path where script is located
@@ -317,17 +318,39 @@ def multi_onset_files(df, onsets, names, durations):
         multi_conditions[i] = {'onsets': multi_onsets[i], 'names': names, 'durations': durations}
         save_name = 'Conditions' + str(i+1) + '.mat'
         io.savemat(pjoin(directory, save_name), multi_conditions[i])
-        #io.savemat(save_path, multi_conditions[i])
-
-    #  save the list of trial type order for the subsequent multvariate analyses (for delay trials)
-    TT_vector = np.ones((3, 168))
-    for i in range(TT_vector.shape[-1]):
-    	TT_vector[0, i] = i + 1
-    	TT_vector[1, i] = int(df.iloc[i, 4])
-    	TT_vector[2, i] = df.iloc[i, 1]
-    np.savetxt('TrialType_order_multivariate.txt', TT_vector, fmt='%1.3f')
+        #io.savemat(save_path, multi_conditions[i]
 
     return
+
+
+def multi_trial_types(df):
+    """
+    Saves .txt file for multivariate analysis with listing of an index reference number to the Conditions.mat file, 
+    the trial type, and the delay onset time 
+
+    Trial types: (1) Load 2 - Face (2) Load 2 - Scenes (3) Load 4 - Mixed (4) Load 4 - Face (5) Load 4 - Scene
+
+    Parameters
+    ----------
+
+    df: pandas DataFrame sorted by trial type and onset times, from which the trial type order will be extracted
+
+    Returns
+    -------
+
+
+    """
+
+    #  save the list of trial type order for the subsequent multvariate analyses (for delay trials)
+    TT_vector = np.ones((3, df.shape[0]))
+    for i in range(TT_vector.shape[-1]):
+    	TT_vector[0, i] = i + 1 # making an index starting at 1
+    	TT_vector[1, i] = int(df.iloc[i, 4]) # trial type number 
+    	TT_vector[2, i] = df.iloc[i, 1] # delay onset time for the given trial 
+    np.savetxt('TrialType_order_multivariate_combined.txt', TT_vector, fmt='%1.3f')
+
+    return
+
 
 
 #fname = 'JSpilot1_resultsTXT.txt'
@@ -367,9 +390,10 @@ def main():
 
     # extract onset times and save out files
     onsets_by_run = norm_onset_times(d, args.run_length, args.TR)
-    collapsed_conds_files(onsets_by_run, fname, combined = combined)
+    #collapsed_conds_files(onsets_by_run, fname, combined = combined)
     df, onsets, names, durations = split_conds_files(onsets_by_run, fname, combined = combined)
-    multi_onset_files(df, onsets, names, durations)
+    #multi_onset_files(df, onsets, names, durations)
+    multi_trial_types(df)
 
 if __name__ == '__main__':
     main()

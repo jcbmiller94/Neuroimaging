@@ -29,14 +29,14 @@ b.spmDir = fileparts(which('spm'));         % path to SPM installation
 dataDir = '/home/despoB/jam124/BiCoWM/derivatives_test/'; % path to MRI data
 b.curSubj = subjects{1};
 b.dataDir = strcat(dataDir,b.curSubj,'/');  % make data directory subject-specific
-b.funcRuns = {'RawEPI_Session2'};  % folders containing functional images e.g. 'RawEPI' or 'RawEPI_Session2' 
+b.funcRuns = { 'RawEPI' 'RawEPI_Session2'};  % folders containing functional images e.g. 'RawEPI' or 'RawEPI_Session2' 
 b.anatT1 = 'Structural';  % folder containing T1 structural 
 b.behavDir = '/home/despoB/jam124/BiCoWM/behav/Pilot1_JS/'; 
-b.conditions = strcat('/home/despoB/jam124/BiCoWM/batch_scripts/Conditions_session2/', 'Conditions', num2str(i), '.mat');
+b.conditions = strcat('/home/despoB/jam124/BiCoWM/batch_scripts/conditions_multivariate/', 'Conditions', num2str(i), '.mat');
 
 %make new directory for each set of conditons (each trial) for the Beta maps
-mkdir(strcat(dataDir, b.curSubj, '/GLM_multivariate_session2/Conditions', num2str(i))); 
-b.spmMatDir = strcat(dataDir, b.curSubj, '/GLM_multivariate_session2/Conditions', num2str(i));
+mkdir(strcat(dataDir, b.curSubj, '/GLM_multivariate_combined/Conditions', num2str(i))); 
+b.spmMatDir = strcat(dataDir, b.curSubj, '/GLM_multivariate_combined/Conditions', num2str(i));
 b.spmMat = strcat(b.spmMatDir, '/SPM.mat');
 % Call sub-function to run exceptions
 %b = run_exceptions(b);

@@ -28,7 +28,8 @@ addpath('/home/despoB/jam124/BiCoWM/batch_scripts'); % add any necessary paths
 % Specify variables
 subjects = {'s01'};
 %batch_functions = {'model_specification_job' 'spm_fmri_concatenate_job' 'model_estimation_job'};
-scans = [221 221 221 221 221 221 221] %length of each run in TRs, for concatenation
+%scans = [221 221 221 221 221 221 221] %length of each run in TRs, for concatenation
+scans = repmat(221, 1, 14)
 %Loop through each different delay trial (168) and run a GLM for each one
 %Trials are in chronological order by trial type (1-5) 
 

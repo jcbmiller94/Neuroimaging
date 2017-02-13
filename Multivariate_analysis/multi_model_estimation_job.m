@@ -8,9 +8,7 @@
 % - uses preprocessed, but unsmoothed .nii files 
 % -  
 
-% TO CHANGE FOR EACH USE:
-% - filter (e.g. '^ra') - change depending on prefixes of your unsmoothed
-%  files, and order of preprocessing 
+% TO CHANGE FOR EACH USE
 %-----------------------------------------------------------------------
 function [matlabbatch] = job_model_estimation(b)
 

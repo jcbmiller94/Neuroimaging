@@ -14,3 +14,12 @@
 4) Forward encoding model: re-adding NaNs back in after calculation, to project weights back into interpretable voxel space 
 
 5) Contrast manager script for regressor weights - what was wanted here? Function to generate these vectors for an array of inputs? (because incorrect trial types will change, etc.) 
+- get info from SPM.mat ==> XX file (from column names) 
+
+Types of blocks: 
+- All L2 (face/body/scene)
+- body/face (L4 body,L4 face, L4 mixed body face)
+- body/scene
+- face/scene 
+
+- get numbering for trial types (come up with something: L2 ==> L4 same ==> L4 mixed) 

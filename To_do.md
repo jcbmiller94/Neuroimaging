@@ -16,6 +16,7 @@
 5) Contrast manager script for regressor weights - what was wanted here? Function to generate these vectors for an array of inputs? (because incorrect trial types will change, etc.) 
 - get info from SPM.mat ==> XX file (from column names) 
 
+
 Types of blocks: 
 - All L2 (face/body/scene)
 - body/face (L4 body,L4 face, L4 mixed body face)
@@ -23,3 +24,13 @@ Types of blocks:
 - face/scene 
 
 - get numbering for trial types (come up with something: L2 ==> L4 same ==> L4 mixed) 
+
+- 1: L2 face
+- 2: L2 body
+- 3: L2 scene
+- 4: L4 face
+- 5: L4 body
+- 6: L4 scene
+- 7: L4 mixed (face/body) 
+- 8: L4 mixed (face/scene)
+- 9: L4 mixed (body/scene) 

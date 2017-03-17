@@ -25,12 +25,12 @@ Types of blocks:
 
 - get numbering for trial types (come up with something: L2 ==> L4 same ==> L4 mixed) 
 
-- 1: L2 face
-- 2: L2 body
-- 3: L2 scene
-- 4: L4 face
-- 5: L4 body
-- 6: L4 scene
-- 7: L4 mixed (face/body) 
-- 8: L4 mixed (face/scene)
-- 9: L4 mixed (body/scene) 
+  - 1: L2 face
+  - 2: L2 body
+  - 3: L2 scene
+  - 4: L4 face
+  - 5: L4 body
+  - 6: L4 scene
+  - 7: L4 mixed (face/body) 
+  - 8: L4 mixed (face/scene)
+  - 9: L4 mixed (body/scene) 
